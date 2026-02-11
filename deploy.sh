@@ -55,7 +55,8 @@ fi
 # --- upload & build ----------------------------------------------------------
 echo "→ Копирование файлов…"
 run "sudo mkdir -p ${APP_DIR} && sudo chown ${USER}:${USER} ${APP_DIR}"
-upload main.go model.go handlers.go go.mod
+run "sudo mkdir -p ${APP_DIR}/uploads && sudo chown ${USER}:${USER} ${APP_DIR}/uploads"
+upload main.go model.go handlers.go media_handlers.go go.mod go.sum
 
 echo "→ Сборка…"
 run "export PATH=\$PATH:/usr/local/go/bin && cd ${APP_DIR} && go mod tidy && go build -o traktors_be ."
@@ -78,6 +79,8 @@ RestartSec=5
 Environment=PORT=8080
 Environment=MONGO_URI=mongodb://localhost:27017
 Environment=DB_NAME=traktors
+Environment=UPLOAD_DIR=${APP_DIR}/uploads
+Environment=BASE_URL=http://${HOST}:8080
 
 [Install]
 WantedBy=multi-user.target
