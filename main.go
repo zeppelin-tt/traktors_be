@@ -17,6 +17,27 @@ var (
 	baseURL    string
 )
 
+func corsMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		origin := r.Header.Get("Origin")
+		if origin == "" {
+			origin = "*"
+		}
+
+		w.Header().Set("Access-Control-Allow-Origin", origin)
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+		w.Header().Set("Access-Control-Allow-Credentials", "true")
+
+		if r.Method == "OPTIONS" {
+			w.WriteHeader(http.StatusNoContent)
+			return
+		}
+
+		next.ServeHTTP(w, r)
+	})
+}
+
 func main() {
 	mongoURI := getenv("MONGO_URI", "mongodb://localhost:27017")
 	dbName := getenv("DB_NAME", "traktors")
@@ -55,8 +76,11 @@ func main() {
 	mux.HandleFunc("POST /media", uploadImage)
 	mux.Handle("GET /media/", http.StripPrefix("/media/", http.FileServer(http.Dir(uploadDir))))
 
+	// Wrap with CORS middleware
+	handler := corsMiddleware(mux)
+
 	log.Printf("listening on :%s", port)
-	log.Fatal(http.ListenAndServe(":"+port, mux))
+	log.Fatal(http.ListenAndServe(":"+port, handler))
 }
 
 func getenv(key, fallback string) string {
