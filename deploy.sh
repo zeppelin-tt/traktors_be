@@ -89,9 +89,21 @@ EOF
 echo "→ Старт сервисов…"
 run "sudo systemctl daemon-reload"
 run "sudo systemctl enable --now mongod"
-run "sudo systemctl enable --now traktors_be"
+run "sudo systemctl enable traktors_be"
+
+echo "→ Перезапуск traktors_be…"
+run "sudo systemctl restart traktors_be"
+sleep 2
 
 echo ""
-run "sudo systemctl status traktors_be --no-pager" || true
+if run "sudo systemctl is-active --quiet traktors_be"; then
+    echo "✓ Сервис успешно запущен"
+    run "sudo systemctl status traktors_be --no-pager" || true
+else
+    echo "✗ ОШИБКА: Сервис не запустился!"
+    run "sudo journalctl -u traktors_be -n 20 --no-pager"
+    exit 1
+fi
+
 echo ""
 echo "✓ Готово.  API:  http://${HOST}:8080/tractors"
