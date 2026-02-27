@@ -25,6 +25,7 @@ type Tractor struct {
 	PTSOwners   *int        `bson:"ptsOwners,omitempty"   json:"ptsOwners"`
 	Location    *string     `bson:"location,omitempty"    json:"location"`
 	Phone       *string     `bson:"phone,omitempty"       json:"phone"`
+	OwnerName   *string     `bson:"ownerName,omitempty"   json:"ownerName"`
 	Description *string     `bson:"description,omitempty" json:"description"`
 	Price       *float64    `bson:"price,omitempty"       json:"price"`
 }
