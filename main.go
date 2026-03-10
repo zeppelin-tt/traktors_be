@@ -59,6 +59,7 @@ func main() {
 	log.Println("connected to MongoDB")
 
 	collection = client.Database(dbName).Collection(collName)
+	featureCollection = client.Database(dbName).Collection("features")
 
 	uploadDir = getenv("UPLOAD_DIR", "./uploads")
 	baseURL = getenv("BASE_URL", "http://localhost:8080")
@@ -72,6 +73,9 @@ func main() {
 	mux.HandleFunc("POST /tractors", createTractor)
 	mux.HandleFunc("PUT /tractors/{id}", updateTractor)
 	mux.HandleFunc("DELETE /tractors/{id}", deleteTractor)
+
+	mux.HandleFunc("GET /feature_check", featureCheck)
+	mux.HandleFunc("POST /feature_set", featureSet)
 
 	mux.HandleFunc("POST /media", uploadImage)
 	mux.Handle("GET /media/", http.StripPrefix("/media/", http.FileServer(http.Dir(uploadDir))))
