@@ -56,7 +56,7 @@ fi
 echo "→ Копирование файлов…"
 run "sudo mkdir -p ${APP_DIR} && sudo chown ${USER}:${USER} ${APP_DIR}"
 run "sudo mkdir -p ${APP_DIR}/uploads && sudo chown ${USER}:${USER} ${APP_DIR}/uploads"
-upload main.go model.go handlers.go media_handlers.go go.mod go.sum
+upload main.go model.go handlers.go media_handlers.go feature_handlers.go go.mod go.sum
 
 echo "→ Сборка…"
 run "export PATH=\$PATH:/usr/local/go/bin && cd ${APP_DIR} && go mod tidy && go build -o traktors_be ."
