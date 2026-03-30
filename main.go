@@ -77,6 +77,9 @@ func main() {
 	mux.HandleFunc("GET /feature_check", featureCheck)
 	mux.HandleFunc("POST /feature_set", featureSet)
 
+	mux.HandleFunc("GET /get_tractors", getStaticTractors)
+	mux.HandleFunc("POST /set_feature", featureSet)
+
 	mux.HandleFunc("POST /media", uploadImage)
 	mux.Handle("GET /media/", http.StripPrefix("/media/", http.FileServer(http.Dir(uploadDir))))
 
