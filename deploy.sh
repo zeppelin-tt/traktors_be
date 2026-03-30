@@ -76,7 +76,7 @@ WorkingDirectory=${APP_DIR}
 ExecStart=${APP_DIR}/traktors_be
 Restart=always
 RestartSec=5
-Environment=PORT=8080
+Environment=PORT=8081
 Environment=MONGO_URI=mongodb://localhost:27017
 Environment=DB_NAME=traktors
 Environment=UPLOAD_DIR=${APP_DIR}/uploads
